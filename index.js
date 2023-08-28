@@ -1,6 +1,7 @@
 //imports inquirer and file system modules
 
 const inquirer = require("inquirer");
+const MaxLengthInputPrompt = require('inquirer-maxlength-input-prompt');
 const fs = require("fs");
 
 //inquirer prompt/command line questions for user
@@ -8,9 +9,10 @@ const fs = require("fs");
 const promptUser = () => {
     return inquirer.prompt([
       {
-        type: 'input',
+        type: 'maxlength-input',
         name: 'text',
         message: 'Enter up to three characters of text to display in your logo.',
+        maxLength: 3,
       },
       {
         type: 'input',
