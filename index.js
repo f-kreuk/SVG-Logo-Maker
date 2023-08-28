@@ -34,3 +34,14 @@ const promptUser = () => {
       },
     ]); 
 };
+
+// function to initialize the app
+
+const init = () => {
+    promptUser()
+};
+
+// Function call to initialize app
+
+init();
+
