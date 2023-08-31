@@ -1,21 +1,25 @@
-//imports inquirer and file system modules
+//imports/requires inquirer and file system modules
 
 const inquirer = require("inquirer");
 const fs = require("fs");
-const {writeFile} = require('fs').promises;
 
-//imports shapes classes
 
-const {Triangle, Square, Circle} = require("./lib/shapes");
+//imports maxlength-inquirer prompt
+//utilized following guide for this: https://snyk.io/advisor/npm-package/inquirer-maxlength-input-prompt
+
+const MaxLengthInputPrompt = require('inquirer-maxlength-input-prompt');
+inquirer.registerPrompt('maxlength-input', MaxLengthInputPrompt)
+
 
 //inquirer prompt/command line questions for user
 
 const promptUser = () => {
     return inquirer.prompt([
       {
-        type: 'input',
+        type: 'maxlength-input',
         name: 'text',
         message: 'Enter up to three characters of text to display in your logo.',
+        maxLength: 3
       },
       {
         type: 'input',
@@ -37,32 +41,62 @@ const promptUser = () => {
         name: 'shapeColor',
         message: 'Select your shape color by entering a color keyword or submitting a hexadecimal number.',
       },
-    ]); 
+    ])
+
+// calls the generateSVG function to write the file
+    .then((answers) => {
+        generateSVG("logo.svg", answers);
+    });
 };
 
+
 // utilized prior ReadMe assignment to help with the prompt
-// function that generates the svg file syntax
+// function that generates the svg file syntax and writes the file
 
-const generateSVG = ({text, textColor, shape, shapeColor}) => {
+const generateSVG = (SVGFileName, answers) => {
 
-    `<svg version="1.1" width="300" height="200" xmlns="http://www.w3.org/2000/svg">`
+    // starting file as an empty string    
+    let stringSVG = "";
+    stringSVG = 
+    `<svg version="1.1" width="300" height="200" xmlns="http://www.w3.org/2000/svg">
+    `;
 
-    // conditional statement to pull in characteristics of a circle, square, and triangle
-    // utilized https://app.uxcel.com/courses/html-for-designers/html-svg-073 for triangle and rect
+    // conditional statement to pull in characteristics of a circle, square, and triangle + shape color
+    // utilized https://app.uxcel.com/courses/html-for-designers/html-svg-073 for triangle and rect dimensions
 
-    if (answers.shape === "Circle") {
-        `<circle cx="150" cy="100" r="80" `
-    } else if (answers.shape === "Square") {
-        `<rect x="100" y="50" width="150" height="150" `
-    } else {
-        `<polygon points="90,0 180, 200 0, 200" `
-    }
-    
-    // adds the shapeColor, textColor, and text to the svg file syntax
+    shape();
 
-    `fill="${shapeColor}" />
-    <text x="150" y="125" font-size="60" text-anchor="middle" fill="${textColor}">${text}</text>
-    </svg>`
+            function shape() {
+                if (answers.shape === "Circle") {
+                    stringSVG += 
+                    `<circle cx="150" cy="100" r="80" fill="${answers.shapeColor}" />
+                    `
+                } else if (answers.shape === "Square") {
+                    stringSVG += 
+                    `<rect x="75" y="25" width="150" height="150" fill="${answers.shapeColor}" />
+                    `
+                } else {
+                    stringSVG += 
+                    `<polygon points="150,2 288, 200 2, 200" fill="${answers.shapeColor}" />
+                    `
+                };
+            };
+
+    // adds the textColor and text to the svg file syntax, stringSVG += is adding on to the existing string
+
+    stringSVG += 
+    `<text x="150" y="125" font-size="60" text-anchor="middle" fill="${answers.textColor}">${answers.text}</text>
+    `;
+
+    stringSVG += 
+    `</svg>`;
+
+    console.log(stringSVG);
+
+    //uses fs module to generate the svg file and logs an error message if something goes wrong
+    fs.writeFile(SVGFileName,stringSVG, (err) => {
+        err ? console.log(err) : console.log("Generated logo.svg");
+    });
 }
 
 
@@ -70,10 +104,8 @@ const generateSVG = ({text, textColor, shape, shapeColor}) => {
 
 const init = () => {
     promptUser()
-    .then((answers) => writeFile('logo.svg',generateSVG(answers)))
-    .then(() => console.log('Successfully generated logo.svg'))
-    .catch((err) => console.error(err));    
 };
+
 
 // Function call to initialize app
 
