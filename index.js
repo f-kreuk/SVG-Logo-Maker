@@ -91,8 +91,6 @@ const generateSVG = (SVGFileName, answers) => {
     stringSVG += 
     `</svg>`;
 
-    console.log(stringSVG);
-
     //uses fs module to generate the svg file and logs an error message if something goes wrong
     fs.writeFile(SVGFileName,stringSVG, (err) => {
         err ? console.log(err) : console.log("Generated logo.svg");
