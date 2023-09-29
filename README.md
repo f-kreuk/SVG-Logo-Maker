@@ -31,3 +31,5 @@ Open an integrated terminal in the new project folder, execute "node index.js" i
 ## Contributing
 
 This project was completed as part of the UCONN Full Stack Coding bootcamp. 
+
+I utilized the hyperlinked guide for the [max-length inquirer prompt](https://snyk.io/advisor/npm-package/inquirer-maxlength-input-prompt) and the [following resource](https://app.uxcel.com/courses/html-for-designers/html-svg-073) for triangle and rectangle dimensions.
