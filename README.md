@@ -4,7 +4,7 @@
 
 This application generates simple logos for projects. The application runs utilizing a command-line application that accepts user inputs regarding text, text-color, shape, and shape-color to generate dynamic logos with ease.
 
-Watch a [video](www.youtube.com) to see the basic functionality:
+Watch a [video](https://youtu.be/i-Y71TO4odM) to see the basic functionality:
 
 
 ## Table of Contents
